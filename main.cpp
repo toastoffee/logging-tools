@@ -1,6 +1,9 @@
 #include <iostream>
+#include <string>
+
+#include "src/log_level.h"
+#include "src/time.hpp"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+
 }

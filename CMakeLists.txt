@@ -7,4 +7,5 @@ add_executable(logging_tools main.cpp
         src/Logger.cpp
         src/Logger.h
         src/LogAppender.cpp
-        src/LogAppender.h)
+        src/LogAppender.h
+        src/time.hpp)
