@@ -1,9 +1,16 @@
 #include <iostream>
 #include <string>
 
-#include "src/log_level.h"
-#include "src/time.hpp"
+#include "src/logger.h"
+
 
 int main() {
 
+    std::string loggerName = "test logger";
+    OstreamAppender coutAppender(std::cout);
+
+    Logger testLogger(loggerName, coutAppender);
+
+    std::string log = "this is a test log";
+    testLogger.Log(log, LogLevel::Warn);
 }

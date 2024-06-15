@@ -8,4 +8,7 @@ add_executable(logging_tools main.cpp
         src/logger.h
         src/log_appender.cpp
         src/log_appender.h
-        src/time.hpp)
+        src/log_level.h
+        src/time.h
+        src/time.cpp
+)

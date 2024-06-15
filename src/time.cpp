@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file           : time.hpp
+  * @file           : time.cpp
   * @author         : toastoffee
   * @brief          : None
   * @attention      : None
@@ -8,15 +8,7 @@
   ******************************************************************************
   */
 
-
-
-#ifndef LOGGING_TOOLS_TIME_HPP
-#define LOGGING_TOOLS_TIME_HPP
-
-#include <string>
-#include <ctime>
-#include <chrono>
-#include <sstream>
+#include "time.h"
 
 std::string GetCurrentTimeStamp(){
 
@@ -30,5 +22,3 @@ std::string GetCurrentTimeStamp(){
 
     return buffer;
 }
-
-#endif //LOGGING_TOOLS_TIME_HPP

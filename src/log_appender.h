@@ -14,7 +14,7 @@
 #define LOGGING_TOOLS_LOG_APPENDER_H
 
 #include <string>
-#include <iostream>
+#include <sstream>
 
 class LogAppender {
 public:
@@ -23,8 +23,13 @@ public:
 };
 
 class OstreamAppender : public LogAppender {
+public:
+    OstreamAppender(std::ostream &ostream) : _ostream(ostream) { };
 
-    OstreamAppender()
+    void Log(std::string content) const override;
+
+private:
+    std::ostream &_ostream;
 };
 
 

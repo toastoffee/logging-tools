@@ -13,19 +13,17 @@
 #ifndef LOGGING_TOOLS_LOGGER_H
 #define LOGGING_TOOLS_LOGGER_H
 
-#include <iostream>
 #include <string>
-#include <ctime>
-#include <stdio.h>
 
 #include "log_level.h"
 #include "log_appender.h"
-#include "time.hpp"
+#include "time.h"
 
 class Logger {
 public:
 
-    explicit Logger(std::string &name, LogAppender &logAppender) : _name(name), _logAppender(logAppender) { }
+    Logger(std::string &name, LogAppender &logAppender) :
+    _name(name), _logAppender(logAppender), _logLevel(LogLevel::Debug) { }
 
     void SetPriority(LogLevel logLevel);
 

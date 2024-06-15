@@ -24,25 +24,6 @@ enum class LogLevel : unsigned int {
 
 };
 
-std::string toString(const LogLevel &logLevel){
-    switch (logLevel) {
-        case LogLevel::Fatal:
-            return "Fatal";
-            break;
-        case LogLevel::Critical:
-            return "Critical";
-            break;
-        case LogLevel::Warn:
-            return "Warn";
-            break;
-        case LogLevel::Info:
-            return "Info";
-            break;
-        case LogLevel::Debug:
-            return "Debug";
-            break;
-    }
-}
 
 
 #endif //LOGGING_TOOLS_LOG_LEVEL_H

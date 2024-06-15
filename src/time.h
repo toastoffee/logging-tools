@@ -1,17 +1,24 @@
 /**
   ******************************************************************************
-  * @file           : log_appender.cpp
+  * @file           : time.h
   * @author         : toastoffee
   * @brief          : None
   * @attention      : None
-  * @date           : 2024/6/14
+  * @date           : 2024/6/15
   ******************************************************************************
   */
 
 
 
-#include "log_appender.h"
+#ifndef LOGGING_TOOLS_TIME_H
+#define LOGGING_TOOLS_TIME_H
 
-void OstreamAppender::Log(std::string content) const {
-    _ostream << content;
-}
+#include <string>
+#include <ctime>
+#include <chrono>
+#include <sstream>
+
+std::string GetCurrentTimeStamp();
+
+
+#endif //LOGGING_TOOLS_TIME_H
