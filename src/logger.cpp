@@ -9,7 +9,7 @@
   */
 
 
-#include "Logger.h"
+#include "logger.h"
 
 void Logger::SetPriority(LogLevel logLevel) {
     _logLevel = logLevel;
@@ -21,7 +21,10 @@ void Logger::Log(std::string &logDesc, LogLevel logLevel) {
 
     char logContent[128];
 
-    snprintf(logContent, sizeof(logContent), "[%s]{}", GetCurrentTimeStamp());
+    snprintf(logContent, sizeof(logContent), "[%s]{%s} %s",
+             GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), logDesc.c_str());
+
+
 
 }
 

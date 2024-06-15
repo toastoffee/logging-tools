@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file           : LogAppender.h
+  * @file           : log_appender.cpp
   * @author         : toastoffee
   * @brief          : None
   * @attention      : None
@@ -10,13 +10,4 @@
 
 
 
-#ifndef LOGGING_TOOLS_LOGAPPENDER_H
-#define LOGGING_TOOLS_LOGAPPENDER_H
-
-
-class LogAppender {
-
-};
-
-
-#endif //LOGGING_TOOLS_LOGAPPENDER_H
+#include "log_appender.h"

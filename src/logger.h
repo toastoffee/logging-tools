@@ -19,11 +19,12 @@
 #include <stdio.h>
 
 #include "log_level.h"
-#include "LogAppender.h"
+#include "log_appender.h"
 #include "time.hpp"
 
 class Logger {
 public:
+
     explicit Logger(std::string &name, LogAppender &logAppender) : _name(name), _logAppender(logAppender) { }
 
     void SetPriority(LogLevel logLevel);

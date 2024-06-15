@@ -18,7 +18,7 @@
 #include <chrono>
 #include <sstream>
 
-char* GetCurrentTimeStamp(){
+std::string GetCurrentTimeStamp(){
 
     std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 
