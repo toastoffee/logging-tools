@@ -35,12 +35,12 @@ public:
 
     std::ostream &LogStream(LogLevel logLevel);
 
-    std::ostream &FatalStream();
-    std::ostream &CriticalStream();
-    std::ostream &ErrorStream();
-    std::ostream &WarnStream();
-    std::ostream &InfoStream();
-    std::ostream &DebugStream();
+//    std::ostream &FatalStream();
+//    std::ostream &CriticalStream();
+//    std::ostream &ErrorStream();
+//    std::ostream &WarnStream();
+//    std::ostream &InfoStream();
+//    std::ostream &DebugStream();
 
 private:
     std::string _name;

@@ -21,33 +21,39 @@ class LogAppender {
 public:
     virtual void Log(std::string content) = 0;
 
-    virtual std::ostream GetStream() const = 0;
+    virtual std::ostream &GetStream() = 0;
 
 };
+
+
 
 class OstreamAppender : public LogAppender {
 public:
-    explicit OstreamAppender(std::ostream &ostream) : _ostream(ostream) { };
+    explicit OstreamAppender(std::ostream* ostream) : _ostream(ostream) { };
 
     void Log(std::string content) override;
 
-    std::ostream GetStream() const override;
+    std::ostream &GetStream() override;
 
 private:
-    std::ostream &_ostream;
+    std::ostream* _ostream;
 };
+
+
 
 class FileAppender : public LogAppender {
 public:
-    explicit FileAppender(std::string &logFilePath, std::fstream &fileStream);
+    explicit FileAppender(std::string &logFilePath);
+
+    ~FileAppender();
 
     void Log(std::string content) override;
 
-    std::ostream GetStream() const override;
+    std::ostream &GetStream() override;
 
 private:
     std::string _logFilePath;
-    std::ofstream _fileStream;
+    std::ofstream* _fileStream;
 };
 
 

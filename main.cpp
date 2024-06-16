@@ -7,7 +7,7 @@
 int main() {
 
     std::string loggerName = "test logger";
-    OstreamAppender coutAppender(std::cout);
+    OstreamAppender coutAppender(&std::cout);
 
     Logger testLogger(loggerName, coutAppender);
 
@@ -19,7 +19,7 @@ int main() {
 
     std::string fileLoggerName = "file logger";
     std::string fileLogPath = "./test.log";
-    FileAppender fileAppender(fileLogPath, <#initializer#>);
+    FileAppender fileAppender(fileLogPath);
 
     Logger testFileLogger(fileLoggerName, fileAppender);
 

@@ -89,27 +89,3 @@ std::ostream &Logger::LogStream(LogLevel logLevel) {
 }
 
 
-std::ostream &Logger::FatalStream() {
-    return ;
-}
-
-std::ostream &Logger::CriticalStream() {
-    return w;
-}
-
-std::ostream &Logger::ErrorStream() {
-    return w1;
-}
-
-std::ostream &Logger::WarnStream() {
-    return wait();
-}
-
-std::ostream &Logger::InfoStream() {
-    return ;
-}
-
-std::ostream &Logger::DebugStream() {
-    return  ;
-}
-

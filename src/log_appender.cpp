@@ -20,26 +20,32 @@
  */
 
 void OstreamAppender::Log(std::string content) {
-    _ostream << content;
+    *_ostream << content;
 }
 
-std::ostream OstreamAppender::GetStream() const {
-    return _ostream;
+std::ostream &OstreamAppender::GetStream() {
+    return *_ostream;
 }
 
 /*
  * FileAppender
  */
 
-FileAppender::FileAppender(std::string &logFilePath) :
-    _logFilePath(logFilePath), _fileStream(std::ofstream(logFilePath, std::ios::out|std::ios::app)){;
+FileAppender::FileAppender(std::string &logFilePath) : _logFilePath(logFilePath){
+
+    _fileStream = new std::ofstream();
+    _fileStream->open(logFilePath , std::ios::out|std::ios::app);
 }
+
+FileAppender::~FileAppender() {
+    _fileStream->close();
+}
+
 
 void FileAppender::Log(std::string content) {
-    _fileStream << content << std::endl;
+    *_fileStream << content << std::endl;
 }
 
-std::ostream &FileAppender::GetStream() const {
-
-    return _fileStream;
+std::ostream &FileAppender::GetStream() {
+    return *_fileStream;
 }
