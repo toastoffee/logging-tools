@@ -24,8 +24,29 @@ public:
 
     void SetPriority(LogLevel logLevel);
 
+    void Log(const char *logDesc, LogLevel logLevel);
     void Log(std::string &logDesc, LogLevel logLevel);
 
+    template<class T>
+    void Log(const char *format, LogLevel logLevel, T arg) {
+        if(logLevel > _logLevel) return;
+
+        char logDesc[128];
+        snprintf(logDesc, sizeof(logDesc), format, arg);
+
+        Log(logDesc, logLevel);
+    }
+
+    template<class T, class... Args>
+    void Log(const char *format, LogLevel logLevel, T arg, Args &&... args){
+        if(logLevel > _logLevel) return;
+
+        char nextFormat[128];
+        snprintf(nextFormat, sizeof(nextFormat), format, arg);
+
+        Log(nextFormat, logLevel, args...);
+    }
+    
     void Fatal(std::string &logDesc);
     void Critical(std::string &logDesc);
     void Error(std::string &logDesc);

@@ -26,4 +26,6 @@ int main() {
     testFileLogger.Log(log, LogLevel::Warn);
 
     testFileLogger.LogStream(LogLevel::Warn) << "log by log Stream\n";
+
+    testFileLogger.Log("%s is a clever boy, which has %s brains", LogLevel::Debug, "yulu", 5);
 }

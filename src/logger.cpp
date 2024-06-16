@@ -42,8 +42,18 @@ void Logger::SetPriority(LogLevel logLevel) {
     _logLevel = logLevel;
 }
 
-void Logger::Log(std::string &logDesc, LogLevel logLevel) {
+void Logger::Log(const char *logDesc, LogLevel logLevel) {
+    if(logLevel > _logLevel) return;
 
+    char logContent[128];
+
+    snprintf(logContent, sizeof(logContent), "[%s]{%s} %s\n",
+             GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), logDesc);
+
+    _logAppender.Log(logContent);
+}
+
+void Logger::Log(std::string &logDesc, LogLevel logLevel) {
     if(logLevel > _logLevel) return;
 
     char logContent[128];
@@ -52,7 +62,6 @@ void Logger::Log(std::string &logDesc, LogLevel logLevel) {
              GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), logDesc.c_str());
 
     _logAppender.Log(logContent);
-
 }
 
 void Logger::Fatal(std::string &logDesc) {
