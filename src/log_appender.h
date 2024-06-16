@@ -36,6 +36,18 @@ private:
     std::ostream &_ostream;
 };
 
+class FileAppender : public LogAppender {
+public:
+    explicit FileAppender(std::string &logFilePath) : _logFilePath(logFilePath) { };
+
+    void Log(std::string content) const override;
+
+    std::ostream &GetStream() const override;
+
+private:
+    std::string _logFilePath;
+};
+
 
 
 

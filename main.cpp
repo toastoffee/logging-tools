@@ -14,5 +14,14 @@ int main() {
     std::string log = "this is a test log";
     testLogger.Log(log, LogLevel::Warn);
 
-    testLogger.LogStream(LogLevel::Warn) << "log by log Stream";
+    testLogger.LogStream(LogLevel::Warn) << "log by log Stream\n";
+
+
+    std::string fileLoggerName = "file logger";
+    std::string fileLogPath = "./test.log";
+    FileAppender fileAppender(fileLogPath);
+
+    Logger testFileLogger(fileLoggerName, fileAppender);
+
+    testFileLogger.Log(log, LogLevel::Warn);
 }
