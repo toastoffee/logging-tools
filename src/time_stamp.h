@@ -10,15 +10,12 @@
 
 
 
-#ifndef LOGGING_TOOLS_TIME_H
-#define LOGGING_TOOLS_TIME_H
+#ifndef LOGGING_TOOLS_TIME_STAMP_H
+#define LOGGING_TOOLS_TIME_STAMP_H
 
 #include <string>
-#include <ctime>
-#include <chrono>
-#include <sstream>
 
 std::string GetCurrentTimeStamp();
 
 
-#endif //LOGGING_TOOLS_TIME_H
+#endif //LOGGING_TOOLS_TIME_STAMP_H

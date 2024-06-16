@@ -18,9 +18,10 @@ enum class LogLevel : unsigned int {
 
     Fatal       = 0,
     Critical    = 100,
-    Warn        = 200,
-    Info        = 300,
-    Debug       = 400,
+    Error       = 200,
+    Warn        = 300,
+    Info        = 400,
+    Debug       = 500,
 
 };
 

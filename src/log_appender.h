@@ -26,7 +26,7 @@ public:
 
 class OstreamAppender : public LogAppender {
 public:
-    OstreamAppender(std::ostream &ostream) : _ostream(ostream) { };
+    explicit OstreamAppender(std::ostream &ostream) : _ostream(ostream) { };
 
     void Log(std::string content) const override;
 

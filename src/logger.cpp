@@ -10,6 +10,10 @@
 
 
 #include "logger.h"
+#include "time_stamp.h"
+
+#include <string>
+
 
 std::string toString(const LogLevel &logLevel){
     switch (logLevel) {
@@ -18,6 +22,9 @@ std::string toString(const LogLevel &logLevel){
             break;
         case LogLevel::Critical:
             return "Critical";
+            break;
+        case LogLevel::Error:
+            return "Error";
             break;
         case LogLevel::Warn:
             return "Warn";

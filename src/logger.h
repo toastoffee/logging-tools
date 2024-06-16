@@ -13,11 +13,8 @@
 #ifndef LOGGING_TOOLS_LOGGER_H
 #define LOGGING_TOOLS_LOGGER_H
 
-#include <string>
-
 #include "log_level.h"
 #include "log_appender.h"
-#include "time.h"
 
 class Logger {
 public:

@@ -9,6 +9,6 @@ add_executable(logging_tools main.cpp
         src/log_appender.cpp
         src/log_appender.h
         src/log_level.h
-        src/time.h
-        src/time.cpp
+        src/time_stamp.h
+        src/time_stamp.cpp
 )
