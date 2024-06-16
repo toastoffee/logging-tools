@@ -13,6 +13,7 @@
 #include "time_stamp.h"
 
 #include <string>
+#include <iostream>
 
 
 std::string toString(const LogLevel &logLevel){
@@ -42,17 +43,6 @@ void Logger::SetPriority(LogLevel logLevel) {
     _logLevel = logLevel;
 }
 
-void Logger::Log(const char *logDesc, LogLevel logLevel) {
-    if(logLevel > _logLevel) return;
-
-    char logContent[128];
-
-    snprintf(logContent, sizeof(logContent), "[%s]{%s} %s\n",
-             GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), logDesc);
-
-    _logAppender.Log(logContent);
-}
-
 void Logger::Log(std::string &logDesc, LogLevel logLevel) {
     if(logLevel > _logLevel) return;
 
@@ -60,6 +50,22 @@ void Logger::Log(std::string &logDesc, LogLevel logLevel) {
 
     snprintf(logContent, sizeof(logContent), "[%s]{%s} %s\n",
              GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), logDesc.c_str());
+
+    _logAppender.Log(logContent);
+}
+
+void Logger::Log(const char *format, LogLevel logLevel, ...) {
+    if(logLevel > _logLevel) return;
+
+    va_list args;
+    va_start(args, logLevel);
+
+    char desc[128];
+    vsnprintf(desc, sizeof(desc), format, args);
+
+    char logContent[128];
+    snprintf(logContent, sizeof(logContent), "[%s]{%s} %s\n",
+             GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), desc);
 
     _logAppender.Log(logContent);
 }
@@ -96,5 +102,7 @@ std::ostream &Logger::LogStream(LogLevel logLevel) {
 
     return _logAppender.GetStream() << logContent;
 }
+
+
 
 
