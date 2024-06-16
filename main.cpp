@@ -19,9 +19,11 @@ int main() {
 
     std::string fileLoggerName = "file logger";
     std::string fileLogPath = "./test.log";
-    FileAppender fileAppender(fileLogPath);
+    FileAppender fileAppender(fileLogPath, <#initializer#>);
 
     Logger testFileLogger(fileLoggerName, fileAppender);
 
     testFileLogger.Log(log, LogLevel::Warn);
+
+    testFileLogger.LogStream(LogLevel::Warn) << "log by log Stream\n";
 }

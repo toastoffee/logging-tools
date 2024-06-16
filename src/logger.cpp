@@ -55,6 +55,30 @@ void Logger::Log(std::string &logDesc, LogLevel logLevel) {
 
 }
 
+void Logger::Fatal(std::string &logDesc) {
+    return Log(logDesc, LogLevel::Fatal);
+}
+
+void Logger::Critical(std::string &logDesc) {
+    return Log(logDesc, LogLevel::Critical);
+}
+
+void Logger::Error(std::string &logDesc) {
+    return Log(logDesc, LogLevel::Error);
+}
+
+void Logger::Warn(std::string &logDesc) {
+    return Log(logDesc, LogLevel::Warn);
+}
+
+void Logger::Info(std::string &logDesc) {
+    return Log(logDesc, LogLevel::Info);
+}
+
+void Logger::Debug(std::string &logDesc) {
+    return Log(logDesc, LogLevel::Info);
+}
+
 std::ostream &Logger::LogStream(LogLevel logLevel) {
     char logContent[128];
 
@@ -62,5 +86,30 @@ std::ostream &Logger::LogStream(LogLevel logLevel) {
              GetCurrentTimeStamp().c_str(), toString(logLevel).c_str());
 
     return _logAppender.GetStream() << logContent;
+}
+
+
+std::ostream &Logger::FatalStream() {
+    return ;
+}
+
+std::ostream &Logger::CriticalStream() {
+    return w;
+}
+
+std::ostream &Logger::ErrorStream() {
+    return w1;
+}
+
+std::ostream &Logger::WarnStream() {
+    return wait();
+}
+
+std::ostream &Logger::InfoStream() {
+    return ;
+}
+
+std::ostream &Logger::DebugStream() {
+    return  ;
 }
 

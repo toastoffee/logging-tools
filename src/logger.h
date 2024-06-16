@@ -26,7 +26,21 @@ public:
 
     void Log(std::string &logDesc, LogLevel logLevel);
 
+    void Fatal(std::string &logDesc);
+    void Critical(std::string &logDesc);
+    void Error(std::string &logDesc);
+    void Warn(std::string &logDesc);
+    void Info(std::string &logDesc);
+    void Debug(std::string &logDesc);
+
     std::ostream &LogStream(LogLevel logLevel);
+
+    std::ostream &FatalStream();
+    std::ostream &CriticalStream();
+    std::ostream &ErrorStream();
+    std::ostream &WarnStream();
+    std::ostream &InfoStream();
+    std::ostream &DebugStream();
 
 private:
     std::string _name;

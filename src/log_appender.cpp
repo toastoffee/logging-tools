@@ -14,15 +14,16 @@
 
 #include <fstream>
 
+
 /*
  * OstreamAppender
  */
 
-void OstreamAppender::Log(std::string content) const {
+void OstreamAppender::Log(std::string content) {
     _ostream << content;
 }
 
-std::ostream &OstreamAppender::GetStream() const {
+std::ostream OstreamAppender::GetStream() const {
     return _ostream;
 }
 
@@ -30,16 +31,15 @@ std::ostream &OstreamAppender::GetStream() const {
  * FileAppender
  */
 
-void FileAppender::Log(std::string content) const {
-    std::fstream f;
-    f.open(_logFilePath, std::ios::out|std::ios::app);
-    f << content << std::endl;
-    f.close();
+FileAppender::FileAppender(std::string &logFilePath) :
+    _logFilePath(logFilePath), _fileStream(std::ofstream(logFilePath, std::ios::out|std::ios::app)){;
+}
+
+void FileAppender::Log(std::string content) {
+    _fileStream << content << std::endl;
 }
 
 std::ostream &FileAppender::GetStream() const {
-    std::fstream f;
-    f.open(_logFilePath, std::ios::out|std::ios::app);
 
-    return f;
+    return _fileStream;
 }
