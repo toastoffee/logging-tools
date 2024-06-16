@@ -20,6 +20,8 @@ class LogAppender {
 public:
     virtual void Log(std::string content) const = 0;
 
+    virtual std::ostream  &GetStream() const = 0;
+
 };
 
 class OstreamAppender : public LogAppender {
@@ -28,9 +30,13 @@ public:
 
     void Log(std::string content) const override;
 
+    std::ostream &GetStream() const override;
+
 private:
     std::ostream &_ostream;
 };
+
+
 
 
 #endif //LOGGING_TOOLS_LOG_APPENDER_H

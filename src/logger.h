@@ -29,7 +29,7 @@ public:
 
     void Log(std::string &logDesc, LogLevel logLevel);
 
-    std::ostream LogStream(LogLevel logLevel);
+    std::ostream &LogStream(LogLevel logLevel);
 
 private:
     std::string _name;

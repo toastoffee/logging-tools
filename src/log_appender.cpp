@@ -15,3 +15,7 @@
 void OstreamAppender::Log(std::string content) const {
     _ostream << content;
 }
+
+std::ostream &OstreamAppender::GetStream() const {
+    return _ostream;
+}

@@ -13,4 +13,6 @@ int main() {
 
     std::string log = "this is a test log";
     testLogger.Log(log, LogLevel::Warn);
+
+    testLogger.LogStream(LogLevel::Warn) << "log by log Stream";
 }
