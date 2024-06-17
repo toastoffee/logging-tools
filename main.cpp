@@ -6,25 +6,19 @@
 
 int main() {
 
-//    std::string loggerName = "test logger";
-//    OstreamAppender coutAppender(&std::cout);
+    std::string loggerName = "test logger";
+    OstreamAppender coutAppender(&std::cout);
+
+    Logger testLogger(loggerName, coutAppender);
+
+    testLogger.Fatal("%s is a clever boy, which has %d brains\n", "yulu", 1);
+
+//    std::string fileLoggerName = "file logger";
+//    std::string fileLogPath = "./test.log";
+//    FileAppender fileAppender(fileLogPath);
 //
-//    Logger testLogger(loggerName, coutAppender);
+//    Logger testFileLogger(fileLoggerName, fileAppender);
 //
-//    std::string log = "this is a test log";
-//    testLogger.Log(log, LogLevel::Warn);
+//    testFileLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
 //
-//    testLogger.LogStream(LogLevel::Warn) << "log by log Stream\n";
-
-
-    std::string fileLoggerName = "file logger";
-    std::string fileLogPath = "./test.log";
-    FileAppender fileAppender(fileLogPath);
-
-    Logger testFileLogger(fileLoggerName, fileAppender);
-
-//    testFileLogger.LogStream(LogLevel::Warn) << "log by log Stream\n";
-
-    testFileLogger.Log(LogLevel::Critical ,"%s is a clever boy, which has %d brains", "yulu", 1);
-    testFileLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
 }

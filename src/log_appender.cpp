@@ -13,14 +13,32 @@
 #include "log_appender.h"
 
 #include <fstream>
-
+#include <iostream>
 
 /*
  * OstreamAppender
  */
 
 void OstreamAppender::Log(std::string content) {
-    *_ostream << content;
+
+    const char *log = content.c_str();
+    std::cout << sizeof(log) << std::endl;
+
+    if(_bufUsing->IsEnough(sizeof(log))){
+        // write to the buf using if is enough
+        _bufUsing->Write(log);
+    }else{
+        // if full, then switch the _bufUsing with the rear of the _bufs
+        _bufUsing->isEmpty = false;
+        _buffersWriteIn.push_back(_bufUsing);
+
+        // set the _bufUsing the rear of emptys
+        _bufUsing = _buffersEmpty.back();
+        _buffersEmpty.pop_back();
+
+        _bufUsing->Write(log);
+    }
+
 }
 
 std::ostream &OstreamAppender::GetStream() {

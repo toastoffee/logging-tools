@@ -40,7 +40,7 @@ public:
 //    std::ostream &InfoStream();
 //    std::ostream &DebugStream();
 
-    void Log(LogLevel logLevel, const char *format, ...);
+    void Log(LogLevel logLevel, const char *format, va_list args);
 
 private:
 //    void Log(LogLevel logLevel, const char *format, ...);

@@ -43,11 +43,8 @@ void Logger::SetPriority(LogLevel logLevel) {
     _logLevel = logLevel;
 }
 
-void Logger::Log(LogLevel logLevel, const char *format, ...) {
+void Logger::Log(LogLevel logLevel, const char *format, va_list args) {
     if(logLevel > _logLevel) return;
-
-    va_list args;
-    va_start(args, format);
 
     char desc[128];
     vsnprintf(desc, sizeof(desc), format, args);
@@ -62,32 +59,57 @@ void Logger::Log(LogLevel logLevel, const char *format, ...) {
 }
 
 void Logger::Fatal(const char *format, ...) {
-
     va_list args;
     va_start(args, format);
 
     Log(LogLevel::Fatal, format, args);
 
+    va_end(args);
 }
 
 void Logger::Critical(const char *format, ...) {
-    Log(LogLevel::Critical, format);
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Fatal, format, args);
+
+    va_end(args);
 }
 
 void Logger::Error(const char *format, ...) {
-    Log(LogLevel::Error, format);
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Error, format, args);
+
+    va_end(args);
 }
 
 void Logger::Warn(const char *format, ...) {
-    Log(LogLevel::Warn, format);
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Warn, format, args);
+
+    va_end(args);
 }
 
 void Logger::Info(const char *format, ...) {
-    Log(LogLevel::Info, format);
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Info, format, args);
+
+    va_end(args);
 }
 
 void Logger::Debug(const char *format, ...) {
-    Log(LogLevel::Debug, format);
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Debug, format, args);
+
+    va_end(args);
 }
 
 std::ostream &Logger::LogStream(LogLevel logLevel) {

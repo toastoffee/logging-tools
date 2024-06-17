@@ -13,16 +13,34 @@
 #ifndef LOGGING_TOOLS_LOG_APPENDER_H
 #define LOGGING_TOOLS_LOG_APPENDER_H
 
+#include "buffer.h"
+
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <vector>
+
+#define BUF_SEQ_SIZE 3
 
 class LogAppender {
 public:
+    LogAppender() : _bufUsing(), _buffersWriteIn(), _buffersEmpty() {
+        _bufUsing = new Buffer();
+
+        for (int i = 0; i < BUF_SEQ_SIZE; ++i) {
+            auto empty = new Buffer;
+            _buffersEmpty.push_back(empty);
+        }
+    };
+
     virtual void Log(std::string content) = 0;
 
     virtual std::ostream &GetStream() = 0;
 
+public:
+    std::vector<Buffer*> _buffersWriteIn;
+    std::vector<Buffer*> _buffersEmpty;
+    Buffer* _bufUsing;
 };
 
 

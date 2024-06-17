@@ -11,4 +11,6 @@ add_executable(logging_tools main.cpp
         src/log_level.h
         src/time_stamp.h
         src/time_stamp.cpp
+        src/buffer.cpp
+        src/buffer.h
 )
