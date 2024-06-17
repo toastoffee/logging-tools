@@ -24,7 +24,7 @@ bool Buffer::IsEnough(int strLen)
 
 void Buffer::Write(const char *str) {
     strcpy(_buf + _bufSize - _bufLeft, str);
-    _bufLeft -= sizeof(str);
+    _bufLeft -= strlen(str);
 
     std::cout << _buf << std::endl;
 }

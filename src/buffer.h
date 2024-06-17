@@ -13,7 +13,7 @@
 #ifndef LOGGING_TOOLS_BUFFER_H
 #define LOGGING_TOOLS_BUFFER_H
 
-#define DEFAULT_BUF_SIZE 4096
+#define DEFAULT_BUF_SIZE 150
 
 class Buffer {
 private:

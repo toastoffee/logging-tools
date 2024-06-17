@@ -11,7 +11,10 @@ int main() {
 
     Logger testLogger(loggerName, coutAppender);
 
-    testLogger.Fatal("%s is a clever boy, which has %d brains\n", "yulu", 1);
+    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
+    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
+    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
+    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
 
 //    std::string fileLoggerName = "file logger";
 //    std::string fileLogPath = "./test.log";

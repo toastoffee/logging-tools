@@ -22,9 +22,11 @@
 void OstreamAppender::Log(std::string content) {
 
     const char *log = content.c_str();
-    std::cout << sizeof(log) << std::endl;
+    int strLen = strlen(log);
 
-    if(_bufUsing->IsEnough(sizeof(log))){
+    std::cout << strLen << std::endl;
+
+    if(_bufUsing->IsEnough(strLen)){
         // write to the buf using if is enough
         _bufUsing->Write(log);
     }else{
