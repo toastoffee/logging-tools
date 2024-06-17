@@ -23,7 +23,8 @@ int main() {
 
     Logger testFileLogger(fileLoggerName, fileAppender);
 
-    testFileLogger.LogStream(LogLevel::Warn) << "log by log Stream\n";
+//    testFileLogger.LogStream(LogLevel::Warn) << "log by log Stream\n";
 
-    testFileLogger.Log("%s is a clever boy, which has %s brains", LogLevel::Debug, "yulu", "yige");
+    testFileLogger.Log(LogLevel::Critical ,"%s is a clever boy, which has %d brains", "yulu", 1);
+    testFileLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
 }

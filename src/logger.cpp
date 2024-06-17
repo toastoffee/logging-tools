@@ -43,55 +43,51 @@ void Logger::SetPriority(LogLevel logLevel) {
     _logLevel = logLevel;
 }
 
-void Logger::Log(std::string &logDesc, LogLevel logLevel) {
-    if(logLevel > _logLevel) return;
-
-    char logContent[128];
-
-    snprintf(logContent, sizeof(logContent), "[%s]{%s} %s\n",
-             GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), logDesc.c_str());
-
-    _logAppender.Log(logContent);
-}
-
-void Logger::Log(const char *format, LogLevel logLevel, ...) {
+void Logger::Log(LogLevel logLevel, const char *format, ...) {
     if(logLevel > _logLevel) return;
 
     va_list args;
-    va_start(args, logLevel);
+    va_start(args, format);
 
     char desc[128];
     vsnprintf(desc, sizeof(desc), format, args);
 
-    char logContent[128];
+    char logContent[512];
     snprintf(logContent, sizeof(logContent), "[%s]{%s} %s\n",
              GetCurrentTimeStamp().c_str(), toString(logLevel).c_str(), desc);
+
+    va_end(args);
 
     _logAppender.Log(logContent);
 }
 
-void Logger::Fatal(std::string &logDesc) {
-    return Log(logDesc, LogLevel::Fatal);
+void Logger::Fatal(const char *format, ...) {
+
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Fatal, format, args);
+
 }
 
-void Logger::Critical(std::string &logDesc) {
-    return Log(logDesc, LogLevel::Critical);
+void Logger::Critical(const char *format, ...) {
+    Log(LogLevel::Critical, format);
 }
 
-void Logger::Error(std::string &logDesc) {
-    return Log(logDesc, LogLevel::Error);
+void Logger::Error(const char *format, ...) {
+    Log(LogLevel::Error, format);
 }
 
-void Logger::Warn(std::string &logDesc) {
-    return Log(logDesc, LogLevel::Warn);
+void Logger::Warn(const char *format, ...) {
+    Log(LogLevel::Warn, format);
 }
 
-void Logger::Info(std::string &logDesc) {
-    return Log(logDesc, LogLevel::Info);
+void Logger::Info(const char *format, ...) {
+    Log(LogLevel::Info, format);
 }
 
-void Logger::Debug(std::string &logDesc) {
-    return Log(logDesc, LogLevel::Info);
+void Logger::Debug(const char *format, ...) {
+    Log(LogLevel::Debug, format);
 }
 
 std::ostream &Logger::LogStream(LogLevel logLevel) {

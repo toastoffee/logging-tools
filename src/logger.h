@@ -24,37 +24,12 @@ public:
 
     void SetPriority(LogLevel logLevel);
 
-    void Log(const char *logDesc, LogLevel logLevel);
-    void Log(std::string &logDesc, LogLevel logLevel);
-
-//    template<class T>
-//    void Log(const char *format, LogLevel logLevel, T arg) {
-//        if(logLevel > _logLevel) return;
-//
-//        char logDesc[128];
-//        snprintf(logDesc, sizeof(logDesc), format, arg);
-//
-//        Log(logDesc, logLevel);
-//    }
-//
-//    template<class T, class... Args>
-//    void Log(const char *format, LogLevel logLevel, T arg, Args &&... args){
-//        if(logLevel > _logLevel) return;
-//
-//        char nextFormat[128];
-//        snprintf(nextFormat, sizeof(nextFormat), format, arg);
-//
-//        Log(nextFormat, logLevel, args...);
-//    }
-
-    void Log(const char *format, LogLevel logLevel, ...);
-    
-    void Fatal(std::string &logDesc);
-    void Critical(std::string &logDesc);
-    void Error(std::string &logDesc);
-    void Warn(std::string &logDesc);
-    void Info(std::string &logDesc);
-    void Debug(std::string &logDesc);
+    void Fatal(const char *format, ...);
+    void Critical(const char *format, ...);
+    void Error(const char *format, ...);
+    void Warn(const char *format, ...);
+    void Info(const char *format, ...);
+    void Debug(const char *format, ...);
 
     std::ostream &LogStream(LogLevel logLevel);
 
@@ -64,6 +39,11 @@ public:
 //    std::ostream &WarnStream();
 //    std::ostream &InfoStream();
 //    std::ostream &DebugStream();
+
+    void Log(LogLevel logLevel, const char *format, ...);
+
+private:
+//    void Log(LogLevel logLevel, const char *format, ...);
 
 private:
     std::string _name;
