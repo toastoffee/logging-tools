@@ -1,30 +1,38 @@
 /**
-  ******************************************************************************
-  * @file           : buffer.cpp
-  * @author         : toastoffee
-  * @brief          : None
-  * @attention      : None
-  * @date           : 2024/6/17
-  ******************************************************************************
-  */
-
-
+ ******************************************************************************
+ * @file           : buffer.cpp
+ * @author         : toastoffee
+ * @brief          : None
+ * @attention      : None
+ * @date           : 2024/6/17
+ ******************************************************************************
+ */
 
 #include "buffer.h"
+
 #include <string>
 #include <iostream>
+#include <cstring>
 
-bool Buffer::IsEnough(int strLen)
+Buffer::Buffer(int bufSize) : _buf(new char[bufSize]), _bufSize(bufSize), _bufLen(0)
 {
-    if(_bufLeft >= strLen){
-        return true;
-    }
-    return false;
 }
 
-void Buffer::Write(const char *str) {
-    strcpy(_buf + _bufSize - _bufLeft, str);
-    _bufLeft -= strlen(str);
+bool Buffer::Write(const char *str, int len)
+{
+    if (_bufLen + len > _bufSize)
+    {
+        return false;
+    }
 
-    std::cout << _buf << std::endl;
+    memcpy(_buf + _bufLen, str, len);
+    _bufLen += len;
+
+    return true;
+}
+
+void Buffer::GetData(char*& buffer, int& len)
+{
+    buffer = _buf;
+    len = _bufLen;
 }

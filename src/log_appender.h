@@ -1,14 +1,12 @@
 /**
-  ******************************************************************************
-  * @file           : log_appender.h
-  * @author         : toastoffee
-  * @brief          : None
-  * @attention      : None
-  * @date           : 2024/6/14
-  ******************************************************************************
-  */
-
-
+ ******************************************************************************
+ * @file           : log_appender.h
+ * @author         : toastoffee
+ * @brief          : None
+ * @attention      : None
+ * @date           : 2024/6/14
+ ******************************************************************************
+ */
 
 #ifndef LOGGING_TOOLS_LOG_APPENDER_H
 #define LOGGING_TOOLS_LOG_APPENDER_H
@@ -18,57 +16,67 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <vector>
+#include <queue>
 #include <mutex>
+#include <condition_variable>
+#include <thread>
 
-class LogAppender {
+class LogAppender
+{
 public:
-    LogAppender() {
-        _bufUsing = new Buffer();
-        _bufEmpty = new Buffer();
-    };
-
-    virtual void Log(std::string content) = 0;
-
-    virtual std::ostream &GetStream() = 0;
-
-public:
-    Buffer* _bufEmpty;
-    Buffer* _bufUsing;
+    virtual void Log(const std::string &content) = 0;
 };
 
-
-
-class OstreamAppender : public LogAppender {
+class OstreamAppender : public LogAppender
+{
 public:
-    explicit OstreamAppender(std::ostream* ostream) : _ostream(ostream) { };
+    explicit OstreamAppender(std::ostream &ostream) : _ostream(ostream){};
 
-    void Log(std::string content) override;
-
-    std::ostream &GetStream() override;
+    virtual void Log(const std::string &content);
 
 private:
-    std::ostream* _ostream;
+    std::ostream &_ostream;
 };
 
-
-
-class FileAppender : public LogAppender {
+class FileAppender : public LogAppender
+{
 public:
-    explicit FileAppender(std::string &logFilePath);
-
+    explicit FileAppender(const std::string &logFilePath);
     ~FileAppender();
 
-    void Log(std::string content) override;
-
-    std::ostream &GetStream() override;
+    virtual void Log(const std::string &content);
 
 private:
     std::string _logFilePath;
-    std::ofstream* _fileStream;
+    std::ofstream _fileStream;
 };
 
+class AsyncOStreamAppender : public LogAppender
+{
+public:
+    AsyncOStreamAppender(std::ostream &ostream);
+    virtual ~AsyncOStreamAppender();
 
+    void Start();
+    void Stop();
 
+    virtual void Log(const std::string &content);
 
-#endif //LOGGING_TOOLS_LOG_APPENDER_H
+private:
+    void WriteThread();
+
+private:
+    bool _running;
+
+    std::ostream &_ostream;
+
+    std::mutex _mu;
+    std::condition_variable _cond;
+
+    std::thread _writeThread;
+
+    Buffer *_currentBuffer;
+    std::queue<Buffer *> _buffers;
+};
+
+#endif // LOGGING_TOOLS_LOG_APPENDER_H

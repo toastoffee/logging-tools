@@ -1,37 +1,30 @@
 /**
-  ******************************************************************************
-  * @file           : buffer.h
-  * @author         : toastoffee
-  * @brief          : None
-  * @attention      : None
-  * @date           : 2024/6/17
-  ******************************************************************************
-  */
-
-
+ ******************************************************************************
+ * @file           : buffer.h
+ * @author         : toastoffee
+ * @brief          : None
+ * @attention      : None
+ * @date           : 2024/6/17
+ ******************************************************************************
+ */
 
 #ifndef LOGGING_TOOLS_BUFFER_H
 #define LOGGING_TOOLS_BUFFER_H
 
 #define DEFAULT_BUF_SIZE 150
 
-class Buffer {
+class Buffer
+{
+public:
+    explicit Buffer(int bufSize = DEFAULT_BUF_SIZE);
+
+    bool Write(const char *str, int len);
+    void GetData(char*& buf, int& len);
+
 private:
     char *_buf;
-    int _bufLeft;
+    int _bufLen;
     int _bufSize;
-public:
-    bool isEmpty;
-
-public:
-    explicit Buffer(int bufSize = DEFAULT_BUF_SIZE) : _bufSize(bufSize), isEmpty(true), _bufLeft(bufSize){
-        _buf = new char[bufSize];
-    };
-
-    bool IsEnough(int strLen);
-
-    void Write(const char* str);
 };
 
-
-#endif //LOGGING_TOOLS_BUFFER_H
+#endif // LOGGING_TOOLS_BUFFER_H
