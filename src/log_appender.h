@@ -19,18 +19,13 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
-
-#define BUF_SEQ_SIZE 3
+#include <mutex>
 
 class LogAppender {
 public:
-    LogAppender() : _bufUsing(), _buffersWriteIn(), _buffersEmpty() {
+    LogAppender() {
         _bufUsing = new Buffer();
-
-        for (int i = 0; i < BUF_SEQ_SIZE; ++i) {
-            auto empty = new Buffer;
-            _buffersEmpty.push_back(empty);
-        }
+        _bufEmpty = new Buffer();
     };
 
     virtual void Log(std::string content) = 0;
@@ -38,8 +33,7 @@ public:
     virtual std::ostream &GetStream() = 0;
 
 public:
-    std::vector<Buffer*> _buffersWriteIn;
-    std::vector<Buffer*> _buffersEmpty;
+    Buffer* _bufEmpty;
     Buffer* _bufUsing;
 };
 

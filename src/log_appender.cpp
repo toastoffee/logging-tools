@@ -24,8 +24,6 @@ void OstreamAppender::Log(std::string content) {
     const char *log = content.c_str();
     int strLen = strlen(log);
 
-    std::cout << strLen << std::endl;
-
     if(_bufUsing->IsEnough(strLen)){
         // write to the buf using if is enough
         _bufUsing->Write(log);
@@ -51,7 +49,7 @@ std::ostream &OstreamAppender::GetStream() {
  * FileAppender
  */
 
-FileAppender::FileAppender(std::string &logFilePath) : _logFilePath(logFilePath){
+FileAppender::FileAppender(std::string &logFilePath) : _logFilePath(logFilePath) {
 
     _fileStream = new std::ofstream();
     _fileStream->open(logFilePath , std::ios::out|std::ios::app);
