@@ -44,10 +44,12 @@ void FileAppender::Log(const std::string &content)
 
 AsyncOStreamAppender::AsyncOStreamAppender(std::ostream &ostream) : _ostream(ostream), _running(false), _currentBuffer(nullptr)
 {
+    Start();
 }
 
 AsyncOStreamAppender::~AsyncOStreamAppender()
 {
+    Stop();
 }
 
 void AsyncOStreamAppender::Start()

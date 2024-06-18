@@ -57,13 +57,13 @@ public:
     AsyncOStreamAppender(std::ostream &ostream);
     virtual ~AsyncOStreamAppender();
 
-    void Start();
-    void Stop();
-
     virtual void Log(const std::string &content);
 
 private:
     void WriteThread();
+
+    void Start();
+    void Stop();
 
 private:
     bool _running;
