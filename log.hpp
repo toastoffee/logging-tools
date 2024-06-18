@@ -71,13 +71,23 @@ Buffer::~Buffer() {
 
 
 /**************************** [LogAppender] ****************************/
+/**************************** [Base] ****************************/
 
+/*
+ * base class of Appender
+ */
 class LogAppender
 {
 public:
     virtual void Log(const char* content) = 0;
 };
 
+
+
+
+/*
+ * the sync abstract version of LogAppender
+ */
 class SyncLogAppender : public LogAppender
 {
 public:
@@ -87,9 +97,20 @@ private:
     virtual void Output(const char* content) = 0;
 };
 
+void SyncLogAppender::Log(const char *content) {
+    Output(content);
+}
+
+
+
+/*
+ * the async abstract version of LogAppender
+ */
 class AsyncLogAppender : public LogAppender
 {
 public:
+
+    ~AsyncLogAppender();
 
     virtual void Log(const char* content);
 
@@ -109,6 +130,12 @@ private:
     Buffer *_currentBuffer;
     std::queue<Buffer *> _buffers;
 };
+
+AsyncLogAppender::~AsyncLogAppender(){
+    _isRunning = false;
+    _cond.notify_one();
+    _writeThread.join();
+}
 
 void AsyncLogAppender::Log(const char* content) {
     if(!_isRunning){
@@ -161,33 +188,86 @@ void AsyncLogAppender::WriteThread() {
     }
 }
 
+/**************************** [LogAppender] ****************************/
+/**************************** [some implementation] ****************************/
 
-class AsyncOStreamAppender : public LogAppender
+class SyncOstreamAppender : public SyncLogAppender
 {
 public:
-    AsyncOStreamAppender(std::ostream &ostream);
-    virtual ~AsyncOStreamAppender();
+    explicit SyncOstreamAppender(std::ostream &ostream) : _ostream(ostream){};
 
-    virtual void Log(const std::string &content);
-
-private:
-    void WriteThread();
-
-    void Start();
-    void Stop();
+    virtual void Output(const char* content);
 
 private:
-    bool _running;
-
     std::ostream &_ostream;
-
-    std::mutex _mu;
-    std::condition_variable _cond;
-
-    std::thread _writeThread;
-
-    Buffer *_currentBuffer;
-    std::queue<Buffer *> _buffers;
 };
+
+void SyncOstreamAppender::Output(const char *content) {
+    _ostream << content;
+}
+
+
+
+class AsyncOstreamAppender : public AsyncLogAppender
+{
+public:
+    explicit AsyncOstreamAppender(std::ostream &ostream) : _ostream(ostream){};
+
+    virtual void Output(const char* content);
+
+private:
+    std::ostream &_ostream;
+};
+
+void AsyncOstreamAppender::Output(const char *content) {
+    _ostream << content;
+}
+
+
+
+class SyncFileAppender : public SyncLogAppender
+{
+public:
+    explicit SyncFileAppender(const std::string &logFilePath);
+    ~SyncFileAppender();
+
+    virtual void Output(const char *content);
+
+private:
+    std::string _logFilePath;
+    std::ofstream _fileStream;
+};
+
+SyncFileAppender::SyncFileAppender(const std::string &logFilePath) : _logFilePath(logFilePath) { }
+
+void SyncFileAppender::Output(const char *content) {
+    _fileStream.open(_logFilePath, std::ios::out | std::ios::app);
+    _fileStream << content;
+    _fileStream.close();
+}
+
+
+
+class AsyncFileAppender : public AsyncLogAppender
+{
+public:
+    explicit AsyncFileAppender(const std::string &logFilePath);
+    ~AsyncFileAppender();
+
+    virtual void Output(const char *content);
+
+private:
+    std::string _logFilePath;
+    std::ofstream _fileStream;
+};
+
+AsyncFileAppender::AsyncFileAppender(const std::string &logFilePath) : _logFilePath(logFilePath) { }
+
+void AsyncFileAppender::Output(const char *content) {
+    _fileStream.open(_logFilePath, std::ios::out | std::ios::app);
+    _fileStream << content;
+    _fileStream.close();
+}
+
 
 #endif // TOAST_LOG_HPP
