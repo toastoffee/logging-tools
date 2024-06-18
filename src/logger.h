@@ -31,7 +31,7 @@ public:
     void Info(const char *format, ...);
     void Debug(const char *format, ...);
 
-    std::ostream &LogStream(LogLevel logLevel);
+//    std::ostream &LogStream(LogLevel logLevel);
 
 //    std::ostream &FatalStream();
 //    std::ostream &CriticalStream();

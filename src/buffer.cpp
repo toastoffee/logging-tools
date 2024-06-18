@@ -36,3 +36,7 @@ void Buffer::GetData(char*& buffer, int& len)
     buffer = _buf;
     len = _bufLen;
 }
+
+Buffer::~Buffer() {
+    delete[] _buf;
+}

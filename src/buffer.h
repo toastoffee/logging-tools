@@ -17,6 +17,7 @@ class Buffer
 {
 public:
     explicit Buffer(int bufSize = DEFAULT_BUF_SIZE);
+    ~Buffer();
 
     bool Write(const char *str, int len);
     void GetData(char*& buf, int& len);

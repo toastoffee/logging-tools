@@ -112,14 +112,14 @@ void Logger::Debug(const char *format, ...) {
     va_end(args);
 }
 
-std::ostream &Logger::LogStream(LogLevel logLevel) {
-    char logContent[128];
-
-    snprintf(logContent, sizeof(logContent), "[%s]{%s} ",
-             GetCurrentTimeStamp().c_str(), toString(logLevel).c_str());
-
-    return _logAppender.GetStream() << logContent;
-}
+//std::ostream &Logger::LogStream(LogLevel logLevel) {
+//    char logContent[128];
+//
+//    snprintf(logContent, sizeof(logContent), "[%s]{%s} ",
+//             GetCurrentTimeStamp().c_str(), toString(logLevel).c_str());
+//
+//    return _logAppender.GetStream() << logContent;
+//}
 
 
 

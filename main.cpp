@@ -7,14 +7,19 @@
 int main() {
 
     std::string loggerName = "test logger";
-    OstreamAppender coutAppender(&std::cout);
+    OstreamAppender coutAppender(std::cout);
 
-    Logger testLogger(loggerName, coutAppender);
+    AsyncOStreamAppender asyncCoutAppender(std::cout);
+    asyncCoutAppender.Start();
+
+    Logger testLogger(loggerName, asyncCoutAppender);
 
     testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
     testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
     testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
     testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
+
+    asyncCoutAppender.Stop();
 
 //    std::string fileLoggerName = "file logger";
 //    std::string fileLogPath = "./test.log";
