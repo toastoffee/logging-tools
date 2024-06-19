@@ -13,7 +13,6 @@
 #ifndef TOAST_LOG_HPP
 #define TOAST_LOG_HPP
 
-#include <stdlib.h>
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -38,7 +37,7 @@ public:
 
     bool Write(const char *str, int len);               // write the str to _buf
     void GetData(char*& buf, int& len);                 // get the _buf data and size
-    bool IsEmpty();
+    bool IsEmpty() const;
 
 private:
     char *_buf;                                         // where data stores
@@ -67,7 +66,7 @@ void Buffer::GetData(char*& buffer, int& len)
     len = _bufLen;
 }
 
-bool Buffer::IsEmpty(){
+bool Buffer::IsEmpty() const{
     return _bufLen == 0;
 }
 
