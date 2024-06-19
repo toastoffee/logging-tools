@@ -1,6 +1,14 @@
 # logging-tools
 a c++11 implementation of logging system
 
+### one-file
+
+include the log.hpp file to use.
+
+```c++
+#include "log.hpp"
+```
+
 ### custom-appender
 
 the tools implements both sync and async appender base class which can be derived to change the log destination.

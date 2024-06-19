@@ -5,18 +5,6 @@
 
 int main() {
 
-//    std::string loggerName = "test logger";
-//    OstreamAppender coutAppender(std::cout);
-//
-//    AsyncOStreamAppender asyncCoutAppender(std::cout);
-//
-//    Logger testLogger(loggerName, asyncCoutAppender);
-//
-//    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
-//    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
-//    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
-//    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
-
     AsyncOstreamAppender asyncTerminalAppender(std::cout);
 
     Logger terminalLogger("mainLogger", asyncTerminalAppender, LogLevel::Debug);
