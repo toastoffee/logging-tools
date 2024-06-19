@@ -104,18 +104,22 @@ void SyncLogAppender::Log(const char *content) {
 
 
 /*
- * the async abstract version of LogAppender
+ * the async abstract version of
+ *
+ *
+ *
+ *      LogAppender
  */
 class AsyncLogAppender : public LogAppender
 {
 public:
 
-    ~AsyncLogAppender();
+    void Log(const char* content) override;
 
-    virtual void Log(const char* content);
+    void JoinThread();
 
 private:
-    virtual void WriteThread();
+    void WriteThread();
 
     virtual void Output(const char* content) = 0;
 
@@ -131,7 +135,7 @@ private:
     std::queue<Buffer *> _buffers;
 };
 
-AsyncLogAppender::~AsyncLogAppender(){
+void AsyncLogAppender::JoinThread() {
     _isRunning = false;
     _cond.notify_one();
     _writeThread.join();
@@ -188,6 +192,7 @@ void AsyncLogAppender::WriteThread() {
     }
 }
 
+
 /**************************** [LogAppender] ****************************/
 /**************************** [some implementation] ****************************/
 
@@ -196,7 +201,8 @@ class SyncOstreamAppender : public SyncLogAppender
 public:
     explicit SyncOstreamAppender(std::ostream &ostream) : _ostream(ostream){};
 
-    virtual void Output(const char* content);
+private:
+    void Output(const char* content) override;
 
 private:
     std::ostream &_ostream;
@@ -213,7 +219,8 @@ class AsyncOstreamAppender : public AsyncLogAppender
 public:
     explicit AsyncOstreamAppender(std::ostream &ostream) : _ostream(ostream){};
 
-    virtual void Output(const char* content);
+private:
+    void Output(const char* content) override;
 
 private:
     std::ostream &_ostream;
@@ -229,9 +236,9 @@ class SyncFileAppender : public SyncLogAppender
 {
 public:
     explicit SyncFileAppender(const std::string &logFilePath);
-    ~SyncFileAppender();
 
-    virtual void Output(const char *content);
+private:
+    void Output(const char *content) override;
 
 private:
     std::string _logFilePath;
@@ -252,9 +259,9 @@ class AsyncFileAppender : public AsyncLogAppender
 {
 public:
     explicit AsyncFileAppender(const std::string &logFilePath);
-    ~AsyncFileAppender();
 
-    virtual void Output(const char *content);
+private:
+    void Output(const char *content) override;
 
 private:
     std::string _logFilePath;
