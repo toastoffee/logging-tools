@@ -18,7 +18,8 @@ int main() {
 //    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
 
     AsyncOstreamAppender asyncTerminalAppender(std::cout);
-    Logger terminalLogger("mainLogger", asyncTerminalAppender);
+
+    Logger terminalLogger("mainLogger", asyncTerminalAppender, LogLevel::Debug);
 
     terminalLogger.FATAL("this is a test log");
     terminalLogger.CRITICAL("this is %d test log", 1);

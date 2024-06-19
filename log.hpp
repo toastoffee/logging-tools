@@ -464,5 +464,4 @@ void Logger::Debug(const char *fileName, int line, const char *format, ...) {
 #define INFO(format, ...)       Info(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
 #define DEBUG(format, ...)      Debug(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
 
-
 #endif // TOAST_LOG_HPP
