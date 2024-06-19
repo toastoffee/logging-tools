@@ -9,6 +9,8 @@
  */
 
 #include "buffer.h"
+#include "../log.hpp"
+
 
 #include <string>
 #include <iostream>
@@ -40,3 +42,4 @@ void Buffer::GetData(char*& buffer, int& len)
 Buffer::~Buffer() {
     delete[] _buf;
 }
+

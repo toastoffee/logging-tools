@@ -13,6 +13,7 @@
 #ifndef TOAST_LOG_HPP
 #define TOAST_LOG_HPP
 
+#include <stdlib.h>
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -37,6 +38,7 @@ public:
 
     bool Write(const char *str, int len);               // write the str to _buf
     void GetData(char*& buf, int& len);                 // get the _buf data and size
+    bool IsEmpty();
 
 private:
     char *_buf;                                         // where data stores
@@ -65,9 +67,14 @@ void Buffer::GetData(char*& buffer, int& len)
     len = _bufLen;
 }
 
+bool Buffer::IsEmpty(){
+    return _bufLen == 0;
+}
+
 Buffer::~Buffer() {
     delete[] _buf;
 }
+
 
 
 /**************************** [LogAppender] ****************************/
@@ -124,8 +131,8 @@ private:
     virtual void Output(const char* content) = 0;
 
 private:
-    bool _isRunning;
-
+    bool _isRunning = false;
+    bool _isClosing = false;
     std::mutex _mu;
     std::condition_variable _cond;
 
@@ -136,7 +143,13 @@ private:
 };
 
 void AsyncLogAppender::JoinThread() {
-    _isRunning = false;
+
+    if(!_currentBuffer->IsEmpty()){
+        _buffers.push(_currentBuffer);
+        _currentBuffer = new Buffer();
+    }
+
+    _isClosing = true;
     _cond.notify_one();
     _writeThread.join();
 }
@@ -144,6 +157,7 @@ void AsyncLogAppender::JoinThread() {
 void AsyncLogAppender::Log(const char* content) {
     if(!_isRunning){
         _isRunning = true;
+        _isClosing = false;
         _currentBuffer = new Buffer();
         _writeThread = std::thread(&AsyncLogAppender::WriteThread, this);
     }
@@ -179,6 +193,11 @@ void AsyncLogAppender::WriteThread() {
 
         while (!buffersToWrite.empty())
         {
+            if(!_currentBuffer->IsEmpty()){
+                _buffers.push(_currentBuffer);
+                _currentBuffer = new Buffer();
+            }
+
             Buffer *buffer = buffersToWrite.front();
             char *data;
             int len;
@@ -188,6 +207,10 @@ void AsyncLogAppender::WriteThread() {
 
             delete buffer;
             buffersToWrite.pop();
+        }
+
+        if(_isClosing){
+            _isRunning = false;
         }
     }
 }
@@ -275,6 +298,172 @@ void AsyncFileAppender::Output(const char *content) {
     _fileStream << content;
     _fileStream.close();
 }
+
+
+
+/**************************** [logLevel] ****************************/
+
+enum class LogLevel : unsigned int {
+
+    Fatal       = 0,
+    Critical    = 100,
+    Error       = 200,
+    Warn        = 300,
+    Info        = 400,
+    Debug       = 500,
+
+};
+
+const char* toCString(const LogLevel &logLevel){
+    switch (logLevel) {
+        case LogLevel::Fatal:
+            return "Fatal";
+            break;
+        case LogLevel::Critical:
+            return "Critical";
+            break;
+        case LogLevel::Error:
+            return "Error";
+            break;
+        case LogLevel::Warn:
+            return "Warn";
+            break;
+        case LogLevel::Info:
+            return "Info";
+            break;
+        case LogLevel::Debug:
+            return "Debug";
+            break;
+    }
+}
+
+
+
+/**************************** [TimeStamp] ****************************/
+
+std::string GetCurrentTimeStamp(){
+
+    std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+
+    std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+    std::tm* now_tm = std::localtime(&now_time_t);
+
+    char buffer[128] = {0};
+    strftime(buffer, sizeof(buffer), "%F %T:", now_tm);
+
+    const auto duration_in_millis = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+    const int milliseconds = duration_in_millis.count();
+
+    std::string msStr = std::to_string(milliseconds);
+    strcpy(buffer + strlen(buffer), msStr.c_str());
+
+    return buffer;
+}
+
+/**************************** [Logger] ****************************/
+
+class Logger {
+public:
+
+    Logger(const char *name, LogAppender &logAppender, LogLevel logLevel = LogLevel::Debug) :
+            _name(name), _logAppender(logAppender), _logLevel(logLevel) { }
+
+    void SetPriority(LogLevel logLevel);
+
+    void Fatal(const char* fileName, int line, const char *format, ...);
+    void Critical(const char* fileName, int line, const char *format, ...);
+    void Error(const char* fileName, int line, const char *format, ...);
+    void Warn(const char* fileName, int line, const char *format, ...);
+    void Info(const char* fileName, int line, const char *format, ...);
+    void Debug(const char* fileName, int line, const char *format, ...);
+
+    void Log(LogLevel logLevel, const char* fileName, int line, const char *format, va_list args);
+
+private:
+    const char *_name;
+    LogAppender &_logAppender;
+    LogLevel _logLevel;
+};
+
+void Logger::SetPriority(LogLevel logLevel) {
+    _logLevel = logLevel;
+}
+
+void Logger::Log(LogLevel logLevel, const char* fileName, int line, const char *format, va_list args) {
+    if(logLevel > _logLevel) return;
+
+    char desc[128];
+    vsnprintf(desc, sizeof(desc), format, args);
+
+    char logContent[512];
+    snprintf(logContent, sizeof(logContent), "[%s] - %s:line %d - [%s] %s\n",
+             GetCurrentTimeStamp().c_str(), fileName, line, toCString(logLevel), desc);
+
+    va_end(args);
+
+    _logAppender.Log(logContent);
+}
+
+void Logger::Fatal(const char *fileName, int line, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Fatal, fileName, line, format, args);
+
+    va_end(args);
+}
+
+void Logger::Critical(const char *fileName, int line, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Fatal, fileName, line, format, args);
+
+    va_end(args);
+}
+
+void Logger::Error(const char *fileName, int line, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Error, fileName, line, format, args);
+
+    va_end(args);
+}
+
+void Logger::Warn(const char *fileName, int line, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Warn, fileName, line, format, args);
+
+    va_end(args);
+}
+
+void Logger::Info(const char *fileName, int line, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Info, fileName, line, format, args);
+
+    va_end(args);
+}
+
+void Logger::Debug(const char *fileName, int line, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    Log(LogLevel::Debug, fileName, line, format, args);
+
+    va_end(args);
+}
+
+#define FATAL(format, ...)      Fatal(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
+#define CRITICAL(format, ...)   Critical(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
+#define ERROR(format, ...)      Error(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
+#define WARN(format, ...)       Warn(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
+#define INFO(format, ...)       Info(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
+#define DEBUG(format, ...)      Debug(__FILE_NAME__, __LINE__, format, ##__VA_ARGS__)
 
 
 #endif // TOAST_LOG_HPP

@@ -18,11 +18,16 @@ int main() {
 //    testLogger.Fatal("%s is a clever boy, which has %d brains", "yulu", 1);
 
     AsyncOstreamAppender asyncTerminalAppender(std::cout);
-    asyncTerminalAppender.Log("log by async ostream appender\n");
+    Logger terminalLogger("mainLogger", asyncTerminalAppender);
 
-    AsyncFileAppender asyncFileAppender("./async.log");
-    asyncFileAppender.Log("log by async ostream appender\n");
+    terminalLogger.FATAL("this is a test log");
+    terminalLogger.CRITICAL("this is %d test log", 1);
+    terminalLogger.ERROR("this is a test log");
+    terminalLogger.WARN("this is a test log");
+    terminalLogger.DEBUG("this is a test log");
+    terminalLogger.INFO("this is a test log");
 
     asyncTerminalAppender.JoinThread();
-    asyncFileAppender.JoinThread();
+
+    return 0;
 }
